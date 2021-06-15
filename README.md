@@ -1,1 +1,1 @@
-# Praca-Inzynierska
+# Praca-Inzynierska - Maciej Chmielewski
