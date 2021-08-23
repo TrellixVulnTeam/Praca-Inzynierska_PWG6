@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { View, TouchableOpacity, StyleSheet, Switch, Text } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
+import FontAwesome from "react-native-vector-icons/AntDesign";
 // import { styles } from "./settings_styles" 
 import { ThemeContext } from "../../../../model/themes"
 import { LanguageContext } from "../../../../languages/translator"
@@ -59,31 +60,31 @@ const Settings = ({ navigation }) => {
             height: 50, 
             alignItems: "center",
             justifyContent: "center",
-            backgroundColor: Colors.white
+            backgroundColor: Colors.secondary_color
         },
         spacer_line: { 
             height: 2,
             width: "91%", 
-            backgroundColor: Colors.grey2 
+            backgroundColor: Colors.main_color 
         },
         header: {
             flex: 1,
             flexDirection: "row",
-            backgroundColor: Colors.white,
+            backgroundColor: Colors.secondary_color,
             paddingHorizontal: 20,
             alignItems: "center"
         },
         header_text: {
             fontWeight: "bold",
-            color: Colors.black,
+            color: Colors.secondary_color,
             paddingLeft: 10,
             paddingBottom: 3,
             fontSize: 32
         },
         body_main: {
             flex: 11,
-            backgroundColor: Colors.white,
-            borderTopColor: Colors.grey2,
+            backgroundColor: Colors.secondary_color,
+            borderTopColor: Colors.main_color,
             borderTopWidth: 2,
             flexDirection: "column"
         },
@@ -94,12 +95,34 @@ const Settings = ({ navigation }) => {
         body_main_text_main:{
             fontSize: 25,
             fontWeight: "bold",
-            color: Colors.black
+            color: Colors.main_color
         },
         body_main_text_secondary:{
             fontSize: 20,
             fontWeight: "bold",
-            color: Colors.grey2
+            color: Colors.main_color
+        },
+        custom_top_nav: {
+          flex: 1,
+          alignItems: "center",
+          flexDirection: "row",
+          backgroundColor: Colors.main_color,
+          borderRadius: 10,
+        },
+        settingsTextBar: {
+          flex: 3,
+          alignItems: "center",
+          justifyContent: "center"
+        },
+        settingsText: {
+          color: Colors.secondary_color,
+          fontSize: 28,
+          fontWeight: 'bold'
+        },
+        main_drawer_icon: {
+          paddingLeft: 20,
+          paddingRight: 20,
+          color: Colors.secondary_color
         },
         body_upgrade_button: {
             flex: 1, 
@@ -113,12 +136,36 @@ const Settings = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <TouchableOpacity onPress={onPressMain}>
-                    <AntDesign name="arrowleft" size={40} color={Colors.black} />
-                </TouchableOpacity>
-                <Text style={styles.header_text}>{LAN.settings}</Text>
-            </View>
+            <View style={styles.custom_top_nav}>
+          <View
+            style={{
+              flex: 1,
+            }}
+          />
+          <View style={styles.settingsTextBar}>
+            <Text style={styles.settingsText}>PROFIL</Text>
+          </View>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              justifyContent: "flex-end",
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                navigation.toggleDrawer();
+              }}
+            >
+              <FontAwesome
+                name="menu-unfold"
+                color={Colors.main_color}
+                size={23}
+                style={styles.main_drawer_icon}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
             <View style={styles.body_main}>
                 <View style={styles.body_main_text_container}>
                     <TouchableOpacity onPress={onPressDarkMode}>
@@ -180,15 +227,6 @@ const Settings = ({ navigation }) => {
                     <Text style={{...styles.body_main_text_secondary, fontSize: 10}}>{LAN.version}</Text>
                     <Text style={{...styles.body_main_text_secondary, fontSize: 10}}>{LAN.made_by}</Text>
                 </View>
-                <View style={{flex: 2}}/>
-                <View style={{flex: 1, paddingHorizontal: 20}}>
-                    <TouchableOpacity onPress={onPressUpgrade} style={{flex: 1}}>
-                        <View style={styles.body_upgrade_button}>
-                            <Text style={{...styles.body_main_text_main, color: Colors.orange}}>{LAN.upPro}</Text>
-                        </View>
-                    </TouchableOpacity>
-                </View>
-                <View style={{flex: 1}}/>
             </View>
         </View>
     )
