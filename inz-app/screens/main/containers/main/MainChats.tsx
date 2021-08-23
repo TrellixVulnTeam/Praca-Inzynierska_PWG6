@@ -26,7 +26,7 @@ const MainChatsScreen = ({ navigation }) => {
   //     fetch(APIvars.prefix + "://" + APIvars.ip + ":" + APIvars.port + "/getChats", {
   //       method: 'POST',
   //       headers: {
-  //           'Accept': 'application/json',
+  //           'Accept': 'application/json',s
   //           'Content-Type': 'application/json',
   //       },
   //       body: JSON.stringify({
