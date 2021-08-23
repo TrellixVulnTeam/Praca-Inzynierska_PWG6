@@ -16,8 +16,26 @@ import { AuthContext } from "../../../components/context";
 import { styles } from "./DrawerContent_styles";
 import { Colors } from "../../../model/colors";
 
+import { getLoginData, storeLoginData } from "../../../asyncActions/login"
+import { useEffect } from "react";
+import { useState } from "react";
+
 export function DrawerContent(props) {
   const { LogoutContext } = React.useContext(AuthContext);
+
+  const [ loginData, setLoginData ] = useState({"imie":"", "nazwisko": "", "email": ""});
+
+  const readData = async () => {
+    setLoginData(await getLoginData())
+  }
+
+  useEffect(() => { 
+    const id = setInterval(() => {
+      readData()
+    }, 3000)
+    return () => clearInterval(id)
+  }, [])
+
   return (
     <View style={{ flex: 1, backgroundColor: Colors.main_color }}>
       <DrawerContentScrollView {...props}>
@@ -31,8 +49,8 @@ export function DrawerContent(props) {
                 size={50}
               />
               <View style={{ marginLeft: 15, flexDirection: "column" }}>
-                <Title style={styles.title}>Maciek Chmielewski</Title>
-                <Caption style={styles.caption}>@MCh.com</Caption>
+                <Title style={styles.title}>{loginData.imie} {loginData.nazwisko}</Title>
+                <Caption style={styles.caption}>{loginData.email}</Caption>
               </View>
             </View>
           </View>
@@ -42,7 +60,19 @@ export function DrawerContent(props) {
               icon={({ color, size }) => (
                 <Icon name="home-outline" color={color} size={size} />
               )}
-              label="Czat"
+              label="Strona Główna"
+              inactiveTintColor={Colors.secondary_color}
+              activeTintColor={Colors.main_color}
+              labelStyle={{fontWeight: "bold"}}
+              onPress={() => {
+                props.navigation.navigate("MainChats");
+              }}
+            />
+            <DrawerItem
+              icon={({ color, size }) => (
+                <Icon name="chat" color={color} size={size} />
+              )}
+              label="Strumień Czatów"
               inactiveTintColor={Colors.secondary_color}
               activeTintColor={Colors.main_color}
               labelStyle={{fontWeight: "bold"}}
@@ -60,6 +90,18 @@ export function DrawerContent(props) {
               labelStyle={{fontWeight: "bold"}}
               onPress={() => {
                 props.navigation.navigate("Profile");
+              }}
+            />
+            <DrawerItem
+              icon={({ color, size }) => (
+                <Icon name="settings-helper" color={color} size={size} />
+              )}
+              label="Ustawienia"
+              inactiveTintColor={Colors.secondary_color}
+              activeTintColor={Colors.main_color}
+              labelStyle={{fontWeight: "bold"}}
+              onPress={() => {
+                props.navigation.navigate("Settings");
               }}
             />
           </Drawer.Section>

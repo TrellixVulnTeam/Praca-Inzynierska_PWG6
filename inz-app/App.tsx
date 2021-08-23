@@ -6,9 +6,14 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import { getLoginData, storeLoginData } from "./asyncActions/login"
+
 import Login from "./screens/main_components/login/Login";
 import Register from "./screens/main_components/register/Register";
 import Main from "./screens/main/Main";
+
+import { ThemeContext, themes } from "./model/themes"
+import { LanguageContext, languages } from "./languages/translator"
 
 import { ActivityIndicator } from "react-native-paper";
 import { AuthContext } from "./components/context";
@@ -22,6 +27,9 @@ export default function App() {
     userName: "",
     userToken: "",
   };
+
+  const [theme, setTheme] = useState({theme: themes.light})
+  const [language, setLanguage] = useState({language: languages.en})
 
   const loginReducer = (prevState, action) => {
     switch (action.type) {
@@ -152,6 +160,41 @@ export default function App() {
     []
   );
 
+  const toggleTheme = () => {
+    setTheme(state => ({
+      theme:
+        state.theme === themes.dark
+          ? themes.light
+          : themes.dark,
+    }));
+  };
+  // @ts-ignore 
+  const changeLanguage = (lang) => {
+    setLanguage({
+      // @ts-ignore
+      language: languages[lang]
+    });
+  };
+
+  const langState = {
+    language: language,
+    changeLanguage: changeLanguage
+  }
+
+  const state = {
+    theme: theme.theme,
+    toggleTheme: toggleTheme,
+  };
+
+  useEffect(() => {
+    // TODO CONST
+    storeLoginData({
+        "imie": "Maciek",
+        "nazwisko": "Chmielewski",
+        "email": "maciej.jakub.chmielewski@gmail.com"
+      })
+  })
+
   useEffect(() => {
     const timer = setTimeout(async () => {
       let userToken;
@@ -176,21 +219,26 @@ export default function App() {
     );
   } else {
     return (
-      <AuthContext.Provider value={authContext}>
-        <NavigationContainer>
-          {loginState.userToken == "" ? (
-            <Stack.Navigator
-              initialRouteName="Login"
-              screenOptions={{ headerShown: false }}
-            >
-              <Stack.Screen name="Login" component={Login} />
-              <Stack.Screen name="Register" component={Register} />
-            </Stack.Navigator>
-          ) : (
-              <Main />
-            )}
-        </NavigationContainer>
-      </AuthContext.Provider>
+      
+      <ThemeContext.Provider value={state}>
+        <LanguageContext.Provider value={langState}>
+          <AuthContext.Provider value={authContext}>
+            <NavigationContainer>
+              {loginState.userToken == "" ? (
+                <Stack.Navigator
+                  initialRouteName="Login"
+                  screenOptions={{ headerShown: false }}
+                >
+                  <Stack.Screen name="Login" component={Login} />
+                  <Stack.Screen name="Register" component={Register} />
+                </Stack.Navigator>
+              ) : (
+                  <Main />
+                )}
+            </NavigationContainer>
+          </AuthContext.Provider>
+        </LanguageContext.Provider>
+      </ThemeContext.Provider>
     );
   }
 }

@@ -18,10 +18,10 @@ export const styles = StyleSheet.create({
     user_info_container:{
         flexDirection: "row",
         paddingHorizontal: 30,
-        paddingVertical: 20
+        paddingVertical: 5
     },
     user_info_text:{
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: 'normal',
         color: Colors.main_color,
         paddingRight: 20

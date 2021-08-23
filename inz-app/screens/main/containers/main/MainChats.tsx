@@ -18,8 +18,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Colors } from "../../../../model/colors";
 import { APIvars } from "../../../../networking/API";
 
-
-const ChatsScreen = ({ navigation }) => {
+const MainChatsScreen = ({ navigation }) => {
   const [addTask, setAddTask] = React.useState(false);
   
   // useEffect(() => {
@@ -74,7 +73,7 @@ const ChatsScreen = ({ navigation }) => {
               justifyContent: "flex-end",
             }}
           >
-            <Text style={styles.custom_top_nav_text}>LOSOWE CZATY</Text>
+            <Text style={styles.custom_top_nav_text}>GŁÓWNE CZATY</Text>
           </View>
           <View
             style={{
@@ -105,7 +104,7 @@ const ChatsScreen = ({ navigation }) => {
     </View>
   );
 };
-export default ChatsScreen;
+export default MainChatsScreen;
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.secondary_color },
