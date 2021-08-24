@@ -19,7 +19,34 @@ import { ActivityIndicator } from "react-native-paper";
 import { AuthContext } from "./components/context";
 import { APIvars } from "./networking/API"
 
+import firebase from "firebase/app";
+import 'firebase/firestore';
+import 'firebase/auth';
+
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useCollectionData } from 'react-firebase-hooks/firestore';
+if (!firebase.apps.length) {
+  firebase.initializeApp({
+    apiKey: "AIzaSyAE_j_ab3X82potUIrI5rJULukp6yLcsa8",
+    authDomain: "alikacja-inzynierska.firebaseapp.com",
+    projectId: "alikacja-inzynierska",
+    storageBucket: "alikacja-inzynierska.appspot.com",
+    messagingSenderId: "358957411488",
+    appId: "1:358957411488:web:efe3bfc52f303f39c82dc5",
+    measurementId: "G-C6HVV7JCQP"
+  })
+}else {
+  firebase.app(); 
+}
+
+const auth = firebase.auth();
+const firestore = firebase.firestore();
+
 const Stack = createStackNavigator();
+
+function SignIn(email = "test@wp.pl", password = "123456") {
+    auth.signInWithEmailAndPassword(email, password)
+}
 
 export default function App() {
   const initialLoginState = {
@@ -28,6 +55,7 @@ export default function App() {
     userToken: "",
   };
 
+  const [user] = useAuthState(auth);
   const [theme, setTheme] = useState({theme: themes.light})
   const [language, setLanguage] = useState({language: languages.en})
 
@@ -70,7 +98,8 @@ export default function App() {
 
   const authContext = useMemo(
     () => ({
-      LoginContext: async (username, password) => {
+      LoginContext: async (username = "", password = "") => {
+        SignIn(username, password)
         AsyncStorage.setItem("userToken", "qqqqq");
         loginState.isLoading = false;
         dispach({ type: "LOGIN", id: username, token: "qqqqq" });
@@ -111,6 +140,7 @@ export default function App() {
         //   });
       },
       LogoutContext: async () => {
+        auth.signOut()
         try {
           await AsyncStorage.setItem("userToken", "");
         } catch (e) {

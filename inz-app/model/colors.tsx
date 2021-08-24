@@ -1,8 +1,8 @@
 export const Colors = {
   // main_color: "blue",
-  main_color: "#041DC2",
+  main_color: "#779dd9",
   // secondary_color: "black",
-  secondary_color: "#BBC2F0",
+  secondary_color: "#d7edd5",
   task_main: "#101010",
   task_text: "white",
   orange: "#e0995e",

@@ -18,33 +18,25 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Colors } from "../../../../model/colors";
 import { APIvars } from "../../../../networking/API";
 
+import Chat from "../single_chat/Chat"
+
 
 const ChatsScreen = ({ navigation }) => {
   const [addTask, setAddTask] = React.useState(false);
-  
-  // useEffect(() => {
-  //   AsyncStorage.getItem("userToken").then((userToken) => {
-  //     fetch(APIvars.prefix + "://" + APIvars.ip + ":" + APIvars.port + "/getChats", {
-  //       method: 'POST',
-  //       headers: {
-  //           'Accept': 'application/json',
-  //           'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({
-  //         userToken: userToken
-  //       })
-  //     }).then((response) => response.json())
-  //     .then((responseJSON) => {
-  //       if (responseJSON.Chats != null){
-  //         setTask(responseJSON.Chats)
-  //       }
-  //     }).catch(function(error) {
-  //       console.log('There has been a problem with your fetch operation: ' + error.message);
-  //       throw error;
-  //     });
-  //   });
-  // }, [])
 
+  const chatsList = [
+    {
+        key: '1',
+        title: 'test',
+        description: 'testDes'
+    },
+    {
+        key: '2',
+        title: 'test2',
+        description: 'testDes2'
+    }
+]
+  
   return (
     <View style={{ flex: 1, backgroundColor: Colors.main_color }}>
       <StatusBar backgroundColor={Colors.main_color} hidden={true} />
@@ -99,6 +91,10 @@ const ChatsScreen = ({ navigation }) => {
         </View>
         <View style={styles.content_container}>
           <View style={{ width: "100%", flex: 1 }}>
+            {chatsList.map(({key,title, description}) => {
+              return <View key={key}>
+                <Chat params={{title: title, description: description}}/></View>
+            })}
           </View>
         </View>
       </Animatable.View>

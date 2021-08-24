@@ -20,8 +20,8 @@ import { Colors } from "../../../model/colors";
 
 const Login = ({ navigation }) => {
   const [data, setData] = React.useState({
-    username: "aaaa",
-    password: "aaaaaaaa",
+    username: "test@wp.pl",
+    password: "123456",
     check_textInputChange: false,
     secureTextEntry: true,
     isValidUser: true,
@@ -50,7 +50,7 @@ const Login = ({ navigation }) => {
     }
   };
 
-  const handlePasswordChange = (val) => {
+  const handlePasswordChange = (val = "") => {
     if (val.trim().length >= 8) {
       setData({
         ...data,
@@ -73,7 +73,7 @@ const Login = ({ navigation }) => {
     });
   };
 
-  const handleValidUser = (val) => {
+  const handleValidUser = (val = "") => {
     if (val.trim().length >= 4) {
       setData({
         ...data,
