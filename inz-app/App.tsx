@@ -24,7 +24,7 @@ import 'firebase/firestore';
 import 'firebase/auth';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useCollectionData } from 'react-firebase-hooks/firestore';
+
 if (!firebase.apps.length) {
   firebase.initializeApp({
     apiKey: "AIzaSyAE_j_ab3X82potUIrI5rJULukp6yLcsa8",
@@ -40,7 +40,6 @@ if (!firebase.apps.length) {
 }
 
 const auth = firebase.auth();
-const firestore = firebase.firestore();
 
 const Stack = createStackNavigator();
 
@@ -59,6 +58,7 @@ export default function App() {
   const [theme, setTheme] = useState({theme: themes.light})
   const [language, setLanguage] = useState({language: languages.en})
 
+  // @ts-ignore
   const loginReducer = (prevState, action) => {
     switch (action.type) {
       case "RETRIVE_TOKEN":
@@ -148,6 +148,7 @@ export default function App() {
         }
         dispach({ type: "LOGOUT" });
       },
+      // @ts-ignore
       GetUserInfoContext: async (userToken) => {
         let userName = "";
         let email = "";
@@ -179,6 +180,7 @@ export default function App() {
           }
         })
       },
+      // @ts-ignore
       RegisterContext: (username, password) => {
         let usertoken = "";
         if (username == "user" && password == "aaaaaaaa") {
@@ -191,12 +193,8 @@ export default function App() {
   );
 
   const toggleTheme = () => {
-    setTheme(state => ({
-      theme:
-        state.theme === themes.dark
-          ? themes.light
-          : themes.dark,
-    }));
+    // @ts-ignore
+    setTheme(state => ({ theme: state.theme === themes.dark ? themes.light : themes.dark }));
   };
   // @ts-ignore 
   const changeLanguage = (lang) => {
