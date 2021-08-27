@@ -1,11 +1,15 @@
 import { APIvars } from '../networking/API'
 
 // @ts-ignore
-const chatCollections = (user) => {
+const chatFunctions = (user, component) => {
 
     // TODO Zapytanie do backendu o czaty
-
-    return user && ['grupa-rowerowa', 'grupa-motocyklowa', 'grupa-kwiatowa']
+    switch(component){
+        case 'FlowChats':
+            return user && ['grupa-rowerowa', 'grupa-motocyklowa', 'grupa-kwiatowa']
+        case 'MainChats':
+            return user && ['grupa-rowerowa', 'grupa-motocyklowa']
+    }
 }   
 
-export default chatCollections;
+export default chatFunctions;

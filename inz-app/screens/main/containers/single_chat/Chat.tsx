@@ -51,7 +51,7 @@ const Chat = ({state, setState} : Props ) => {
     const [user] = useAuthState(auth);
 
     const messagesRef = firestore.collection(state.chat);
-    const query = messagesRef.orderBy('createdAt').limit(30);
+    const query = messagesRef.orderBy('createdAt', 'desc').limit(8);
     const [messages] = useCollectionData(query, {idField: 'id'});
     
 
@@ -61,14 +61,15 @@ const Chat = ({state, setState} : Props ) => {
 
         // @ts-ignore
         const {uid} = auth.currentUser;
-
-        await messagesRef.add({
-            text: inputValue,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            uid: uid
-        });
-
-        setInputValue('')
+        if (inputValue != ''){
+            await messagesRef.add({
+                text: inputValue,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                uid: uid
+            });
+    
+            setInputValue('')
+        }
     }
 
     return (

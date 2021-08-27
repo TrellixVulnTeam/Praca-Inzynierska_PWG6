@@ -20,7 +20,7 @@ import { APIvars } from "../../../../networking/API";
 
 import Chat from "../single_chat/Chat"
 import firebase from "firebase";
-import chatCollections from '../../../../functions/chat_groups'
+import chatFunctions from '../../../../functions/chat_groups'
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 
@@ -48,7 +48,7 @@ const ChatsScreen = ({ navigation }) => {
   const auth = firebase.auth();
   const [user] = useAuthState(auth);
 
-  const czatGrups = chatCollections(user)
+  const czatGrups = chatFunctions(user, 'FlowChats')
 
   
   return (
@@ -143,21 +143,4 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.secondary_color,
     alignItems: "center",
   },
-  fab_button_text: {
-    fontSize: 45, 
-    color: Colors.secondary_color
-  },
-  fab_button: {
-    position: 'absolute', 
-    width: 56, 
-    height: 56, 
-    alignItems: 'center', 
-    justifyContent: 'center', 
-    right: 20, 
-    bottom: 20, 
-    backgroundColor: Colors.main_color, 
-    borderRadius: 30, 
-    paddingBottom: 4,
-    elevation: 8 
-  }
 });
