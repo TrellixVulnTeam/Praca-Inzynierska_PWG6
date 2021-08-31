@@ -91,9 +91,9 @@ const Chat = ({state, setState} : Props ) => {
             <View style={styles.body}>
                 <View style={styles.messages}>
                     <FlatList
-                        data={messages}
+                        data={messages==undefined ? [] : messages.reverse()}
                         // @ts-ignore
-                        renderItem={msg => <ChatMessage key={msg.id} message={msg}/>} 
+                        renderItem={msg => <ChatMessage key={msg.createdAt} message={msg}/>} 
                     />
                 </View>
                 <View style={styles.inputBox}>
