@@ -51,7 +51,7 @@ const Chat = ({state, setState} : Props ) => {
     const [user] = useAuthState(auth);
 
     const messagesRef = firestore.collection(state.chat);
-    const query = messagesRef.orderBy('createdAt', 'desc').limit(8);
+    const query = messagesRef.orderBy('createdAt', 'desc').limit(20);
     const [messages] = useCollectionData(query, {idField: 'id'});
     
 

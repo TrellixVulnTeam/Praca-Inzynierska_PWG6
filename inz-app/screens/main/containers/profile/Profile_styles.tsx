@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 import { Colors } from "../../../../model/colors";
 
 export const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: Colors.secondary_color },
+    container: { flex: 1, backgroundColor: Colors.white },
     custom_top_nav: {
       flex: 1,
       alignItems: "center",
@@ -28,9 +28,17 @@ export const styles = StyleSheet.create({
     },
     textInput: {
       flex: 1,
+      // @ts-ignore
       marginTop: Platform.OS === "ios" ? 0 : -12,
       paddingTop: 13,
+      paddingLeft: 5,
       color: Colors.main_color
+    },
+    textInputContainer: {
+      borderColor: Colors.main_color, 
+      borderWidth: 1, 
+      borderRadius: 15, 
+      flex: 1 
     },
     settingsText: {
       color: Colors.main_color,
@@ -43,6 +51,6 @@ export const styles = StyleSheet.create({
     },
     content_container: {
       flex: 9,
-      backgroundColor: Colors.secondary_color,
+      backgroundColor: Colors.white,
     },
   });
