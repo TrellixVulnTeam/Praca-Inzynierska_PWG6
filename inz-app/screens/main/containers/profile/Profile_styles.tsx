@@ -1,5 +1,9 @@
+import { useContext } from "react";
 import { StyleSheet } from "react-native";
-import { Colors } from "../../../../model/colors";
+import { ThemeContext } from "../../../../model/themes"
+
+const state = useContext(ThemeContext)
+const Colors = state.theme;
 
 export const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: Colors.white },

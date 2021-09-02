@@ -1,27 +1,21 @@
-import React, {useEffect} from "react";
+import React, { useContext} from "react";
 import {
   View,
   TouchableOpacity,
   StyleSheet,
   StatusBar,
   Text,
-  ScrollView,
-  Modal,
-  Alert,
 } from "react-native";
 // @ts-ignore 
 import FontAwesome from "react-native-vector-icons/AntDesign";
 import * as Animatable from "react-native-animatable";
-import { FlatList } from "react-native-gesture-handler";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
-import { Colors } from "../../../../model/colors";
-import { APIvars } from "../../../../networking/API";
 
 import Chat from "../single_chat/Chat"
 import firebase from "firebase";
 import chatFunctions from '../../../../functions/chat_groups'
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { ThemeContext } from "../../../../model/themes"
+import { LanguageContext } from "../../../../languages/translator"
 
 
 if (!firebase.apps.length) {
@@ -40,6 +34,11 @@ if (!firebase.apps.length) {
 
 // @ts-ignore 
 const ChatsScreen = ({ navigation }) => {
+  const state = useContext(ThemeContext)
+  const langState = useContext(LanguageContext)
+  const LAN = langState.language.language
+  const Colors = state.theme;
+
   const [showChat, setShowChat] = React.useState({
     show: false,
     chat: ""
@@ -49,7 +48,34 @@ const ChatsScreen = ({ navigation }) => {
   const [user] = useAuthState(auth);
 
   const czatGrups = chatFunctions(user, 'FlowChats')
-
+  const styles = StyleSheet.create({
+    container: { flex: 1, backgroundColor: Colors.secondary_color },
+    custom_top_nav: {
+      flex: 1,
+      alignItems: "center",
+      flexDirection: "row",
+      backgroundColor: Colors.main_color,
+      borderBottomLeftRadius: 10,
+      borderBottomRightRadius: 10,
+      borderBottomWidth: 3
+    },
+    custom_top_nav_text:{
+      flex: 1,
+      textAlign: "center",
+      fontSize: 28,
+      color: Colors.secondary_color,
+      fontWeight: 'bold',
+    },
+    main_drawer_icon: {
+      paddingLeft: 20,
+      paddingRight: 20,
+    },
+    content_container: {
+      flex: 11,
+      backgroundColor: Colors.secondary_color,
+      alignItems: "center",
+    },
+  });
   
   return (
     <View style={{ flex: 1, backgroundColor: Colors.main_color }}>
@@ -71,7 +97,7 @@ const ChatsScreen = ({ navigation }) => {
               justifyContent: "flex-end",
             }}
           >
-            <Text style={styles.custom_top_nav_text}>LOSOWE CZATY</Text>
+            <Text style={styles.custom_top_nav_text}>{LAN.random_chats}</Text>
           </View>
           <View
             style={{
@@ -101,7 +127,7 @@ const ChatsScreen = ({ navigation }) => {
               {czatGrups && czatGrups.map((name) => {
                 return <TouchableOpacity key={name} onPress={() => {setShowChat({ show: true, chat: name})}}>
                   <View key={name} style={{width: "100%", height: 100, backgroundColor: Colors.main_color, borderWidth: 3, borderRadius: 10, justifyContent: "center", alignItems: "center"}}>
-                    <Text style={{fontSize: 30, fontWeight: "bold"}}>{name}</Text>
+                    <Text style={{fontSize: 30, fontWeight: "bold", color: Colors.secondary_color}}>{name}</Text>
                   </View>
                 </TouchableOpacity> 
               })}
@@ -116,31 +142,3 @@ const ChatsScreen = ({ navigation }) => {
   );
 };
 export default ChatsScreen;
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: Colors.secondary_color },
-  custom_top_nav: {
-    flex: 1,
-    alignItems: "center",
-    flexDirection: "row",
-    backgroundColor: Colors.main_color,
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
-  },
-  custom_top_nav_text:{
-    flex: 1,
-    textAlign: "center",
-    fontSize: 28,
-    color: Colors.secondary_color,
-    fontWeight: 'bold',
-  },
-  main_drawer_icon: {
-    paddingLeft: 20,
-    paddingRight: 20,
-  },
-  content_container: {
-    flex: 11,
-    backgroundColor: Colors.secondary_color,
-    alignItems: "center",
-  },
-});

@@ -7,5 +7,6 @@ export const languages = {
   
 export const LanguageContext = React.createContext({
     language: languages.en,
+    // @ts-ignore
     changeLanguage: (lang) => {}
 });

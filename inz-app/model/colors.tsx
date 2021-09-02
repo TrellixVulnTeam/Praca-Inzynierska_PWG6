@@ -1,7 +1,5 @@
 export const Colors = {
-  // main_color: "blue",
   main_color: "#779dd9",
-  // secondary_color: "black",
   secondary_color: "#d7edd5",
   task_main: "#101010",
   task_text: "white",
@@ -17,6 +15,8 @@ export const Colors = {
 };
 
 export const Dark = {
+  main_color: "#5c6aad",
+  secondary_color: "#000000",
   orange: "#e0995e",
   black: "#FFFFFF",
   white: "#303030",

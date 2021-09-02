@@ -103,41 +103,6 @@ export default function App() {
         AsyncStorage.setItem("userToken", "qqqqq");
         loginState.isLoading = false;
         dispach({ type: "LOGIN", id: username, token: "qqqqq" });
-        // loginState.isLoading = true;
-        // let usertoken = "";
-        // fetch(APIvars.prefix + "://" + APIvars.ip + ":" + APIvars.port + "/Auth", {
-        //   method: 'POST',
-        //   headers: {
-        //     'Accept': 'application/json',
-        //     'Content-Type': 'application/json',
-        //   },
-        //   body: JSON.stringify({
-        //     usr: username,
-        //     pass: password
-        //   })
-        // })
-        //   .then((response) => response.json())
-        //   .then((responseJSON) => {
-        //     if (responseJSON.Users.Token != "") {
-        //       usertoken = responseJSON.Users.Token;
-
-        //       try {
-        //         AsyncStorage.setItem("userToken", responseJSON.Users.Token);
-        //       } catch (e) {
-        //         Alert.alert("ERROR!", "Set token error.", [{ text: "Okay" }]);
-        //       }
-        //     } else {
-        //       Alert.alert("Invalid User!", "Username or password is incorrect.", [
-        //         { text: "Okay" },
-        //       ]);
-        //     }
-        //     console.log(responseJSON.Users.Token)
-        //     loginState.isLoading = false;
-        //     dispach({ type: "LOGIN", id: username, token: usertoken });
-        //   }).catch(function (error) {
-        //     console.log('There has been a problem with your fetch operation: ' + error.message);
-        //     throw error;
-        //   });
       },
       LogoutContext: async () => {
         auth.signOut()

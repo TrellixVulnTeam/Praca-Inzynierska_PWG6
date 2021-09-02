@@ -1,19 +1,80 @@
-import React, { useState, useEffect } from "react";
-import { View, TouchableOpacity, TextInput, StatusBar, Text, KeyboardAvoidingView } from "react-native";
+import React, { useState, useEffect, useContext } from "react";
+import { View, TouchableOpacity, TextInput, StatusBar, Text, KeyboardAvoidingView, StyleSheet } from "react-native";
 
 // @ts-ignore
 import FontAwesome from "react-native-vector-icons/AntDesign";
 import * as Animatable from "react-native-animatable";
+import { ThemeContext } from "../../../../model/themes"
+import { LanguageContext } from "../../../../languages/translator"
 
 import { getLoginData, storeLoginData } from "../../../../asyncActions/login"
 
-import { Colors } from "../../../../model/colors";
-import { styles } from "./Profile_styles"
+// import { styles } from "./Profile_styles"
 
 // @ts-ignore
 const ProfileScreen = ({ navigation }) => {
 
+  const state = useContext(ThemeContext)
+  const langState = useContext(LanguageContext)
+  const LAN = langState.language.language
+
+  const Colors = state.theme;
+
   const [ editUserData, setEditUserData ] = useState(false)
+
+  const styles = StyleSheet.create({
+    container: { flex: 1, backgroundColor: Colors.secondary_color },
+    custom_top_nav: {
+      flex: 1,
+      alignItems: "center",
+      flexDirection: "row",
+      backgroundColor: Colors.secondary_color,
+      borderRadius: 10,
+    },
+    settingsTextBar: {
+      flex: 3,
+      alignItems: "center",
+      justifyContent: "center"
+    },
+    user_info_container:{
+        flexDirection: "row",
+        paddingHorizontal: 30,
+        paddingVertical: 5
+    },
+    user_info_text:{
+        fontSize: 18,
+        fontWeight: 'normal',
+        color: Colors.main_color,
+        paddingRight: 20
+    },
+    textInput: {
+      flex: 1,
+      // @ts-ignore
+      marginTop: Platform.OS === "ios" ? 0 : -12,
+      paddingTop: 13,
+      paddingLeft: 5,
+      color: Colors.main_color
+    },
+    textInputContainer: {
+      borderColor: Colors.main_color, 
+      borderWidth: 1, 
+      borderRadius: 15, 
+      flex: 1 
+    },
+    settingsText: {
+      color: Colors.main_color,
+      fontSize: 28,
+      fontWeight: 'bold'
+    },
+    main_drawer_icon: {
+      paddingLeft: 20,
+      paddingRight: 20,
+    },
+    content_container: {
+      flex: 9,
+      backgroundColor: Colors.secondary_color
+    },
+  });
   
   const [data, setData] = React.useState({
     userData:{
@@ -82,7 +143,7 @@ const ProfileScreen = ({ navigation }) => {
     <KeyboardAvoidingView
     // @ts-ignore
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={-1000}
+      keyboardVerticalOffset={-230}
       style={{flex: 1}}
     >
       <View style={{ flex: 1, backgroundColor: Colors.secondary_color }}>
@@ -95,7 +156,7 @@ const ProfileScreen = ({ navigation }) => {
               }}
             />
             <View style={styles.settingsTextBar}>
-              <Text style={styles.settingsText}>PROFIL</Text>
+              <Text style={styles.settingsText}>{LAN.profile}</Text>
             </View>
             <View
               style={{
@@ -124,10 +185,10 @@ const ProfileScreen = ({ navigation }) => {
           <View style={styles.content_container}>
             <View style={{ width: "100%", height: '30%', paddingTop: 10}}>
               <View style={{ flex: 0.2, justifyContent: "center", alignItems: "center", paddingVertical: 20 }}>
-                <Text style={{ fontSize: 25, fontWeight: 'bold', color: Colors.main_color }}>Dane użytkownika</Text>
+                <Text style={{ fontSize: 25, fontWeight: 'bold', color: Colors.main_color }}>{LAN.user_data}</Text>
               </View>
               <View style={styles.user_info_container}>
-                <Text style={styles.user_info_text}>Imie:</Text>
+                <Text style={styles.user_info_text}>{LAN.name}</Text>
                   {editUserData ?
                   <View style={{ flex: 1 }}>
                     {inputViewUserData('Imie', false, "imie")}
@@ -136,7 +197,7 @@ const ProfileScreen = ({ navigation }) => {
                   <Text style={styles.user_info_text}>{data.userData.imie}</Text>}
               </View>
               <View style={styles.user_info_container}>
-                <Text style={styles.user_info_text}>Nazwisko:</Text>
+                <Text style={styles.user_info_text}>{LAN.surname}</Text>
                 {editUserData ?
                   <View style={{ flex: 1 }}>
                     {inputViewUserData('Nazwisko', false, "nazwisko")}
@@ -145,7 +206,7 @@ const ProfileScreen = ({ navigation }) => {
                   <Text style={styles.user_info_text}>{data.userData.nazwisko}</Text>}
               </View>
               <View style={styles.user_info_container}>
-                <Text style={styles.user_info_text}>Email:</Text>
+                <Text style={styles.user_info_text}>{LAN.email}</Text>
                 {editUserData ?
                   <View style={{ flex: 1 }}>
                     {inputViewUserData('Email', false, "email")}
@@ -154,7 +215,7 @@ const ProfileScreen = ({ navigation }) => {
                   <Text style={styles.user_info_text}>{data.userData.email}</Text>}
               </View>
               <View style={styles.user_info_container}>
-                <Text style={styles.user_info_text}>Haslo:</Text>
+                <Text style={styles.user_info_text}>{LAN.password}</Text>
                 {editUserData ?
                   <View style={{ flex: 1 }}>
                     {inputView('Haslo', true, "password")}
@@ -164,7 +225,7 @@ const ProfileScreen = ({ navigation }) => {
               </View>
               {editUserData &&
                 <View style={styles.user_info_container}>
-                  <Text style={styles.user_info_text}>Powtórz hasło:</Text>
+                  <Text style={styles.user_info_text}>{LAN.repeat_password}</Text>
                   <View style={{ flex: 1 }}>
                     {inputView('Powtórz hasło', true, "passwordConfirm")}
                   </View>
@@ -173,10 +234,10 @@ const ProfileScreen = ({ navigation }) => {
             </View>
             <View style={{ width: "100%", height: "25%"}}>
               <View style={{ flex: 0.2, justifyContent: "center", alignItems: "center", paddingVertical: 20 }}>
-                <Text style={{ fontSize: 25, fontWeight: 'bold', color: Colors.main_color }}>Preferencje użytkownika</Text>
+                <Text style={{ fontSize: 25, fontWeight: 'bold', color: Colors.main_color }}>{LAN.user_preferences}</Text>
               </View>
               <View style={styles.user_info_container}>
-                <Text style={styles.user_info_text}>Dane1:</Text>
+                <Text style={styles.user_info_text}>{LAN.data1}</Text>
                   {editUserData ?
                   <View style={{ flex: 1 }}>
                     {inputViewUserData('Dane1', false, "Dane1")}
@@ -185,7 +246,7 @@ const ProfileScreen = ({ navigation }) => {
                   <Text style={styles.user_info_text}>{data.userData.dane1}</Text>}
               </View>
               <View style={styles.user_info_container}>
-                <Text style={styles.user_info_text}>Dane2:</Text>
+                <Text style={styles.user_info_text}>{LAN.data2}</Text>
                 {editUserData ?
                   <View style={{ flex: 1 }}>
                     {inputViewUserData('Dane2', false, "Dane2")}
@@ -194,7 +255,7 @@ const ProfileScreen = ({ navigation }) => {
                   <Text style={styles.user_info_text}>{data.userData.dane2}</Text>}
               </View>
               <View style={styles.user_info_container}>
-                <Text style={styles.user_info_text}>Dane3:</Text>
+                <Text style={styles.user_info_text}>{LAN.data3}</Text>
                 {editUserData ?
                   <View style={{ flex: 1 }}>
                     {inputViewUserData('Dane3', false, "Dane3")}
@@ -207,15 +268,15 @@ const ProfileScreen = ({ navigation }) => {
               {editUserData ?
               <View style={{ height: "35%", width: "80%", flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
                 <TouchableOpacity onPress={() => {setEditUserData(false)}} style={{backgroundColor: Colors.main_color, width: "45%", height:"100%", borderRadius: 10, justifyContent:"center", alignItems: "center"}}>
-                  <Text style={{ fontWeight: 'bold', fontSize: 30 }}>ANULUJ</Text>
+                  <Text style={{ fontWeight: 'bold', fontSize: 30 }}>{LAN.cancel}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => {setEditUserData(false), saveLoginData()}} style={{backgroundColor: Colors.main_color, width: "45%", height:"100%", borderRadius: 10, justifyContent:"center", alignItems: "center"}}>
-                  <Text style={{ fontWeight: 'bold', fontSize: 30 }}>ZAPISZ</Text>
+                  <Text style={{ fontWeight: 'bold', fontSize: 30 }}>{LAN.save}</Text>
                 </TouchableOpacity>
               </View>
               :
               <TouchableOpacity onPress={() => {setEditUserData(true)}} style={{backgroundColor: Colors.main_color, width: "50%", height:"25%", borderRadius: 10, justifyContent:"center", alignItems: "center"}}>
-                <Text style={{ fontWeight: 'bold', fontSize: 30 }}>EDYCJA</Text>
+                <Text style={{ fontWeight: 'bold', fontSize: 30 }}>{LAN.edit}</Text>
               </TouchableOpacity>
               }
             </View>
