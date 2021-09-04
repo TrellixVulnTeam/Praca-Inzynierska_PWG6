@@ -1,4 +1,4 @@
-import React, { useContext} from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   View,
   TouchableOpacity,
@@ -16,6 +16,7 @@ import chatFunctions from '../../../../functions/chat_groups'
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { ThemeContext } from "../../../../model/themes"
 import { LanguageContext } from "../../../../languages/translator"
+import { APIvars } from '../../../../networking/API'
 
 
 if (!firebase.apps.length) {
@@ -39,6 +40,8 @@ const ChatsScreen = ({ navigation }) => {
   const LAN = langState.language.language
   const Colors = state.theme;
 
+  const [czatGrups, setCzatGrups] = useState([]);
+
   const [showChat, setShowChat] = React.useState({
     show: false,
     chat: ""
@@ -46,8 +49,32 @@ const ChatsScreen = ({ navigation }) => {
 
   const auth = firebase.auth();
   const [user] = useAuthState(auth);
+// @ts-ignore
+  const getData = async (user) => {
+    try {
+     const response = await fetch(APIvars.prefix + "://" + APIvars.ip + ":" + APIvars.port + "/getUserInfo", {
+      method: 'POST',
+      headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+      UserToken: user.uid
+      })
+  })
+     const json = await response.json();
+     setCzatGrups(json != undefined && json.ChatFlow.split(','));
+   } catch (error) {
+     console.error(error);
+   } 
+ }
 
-  const czatGrups = chatFunctions(user, 'FlowChats')
+ useEffect(() => {
+  getData(user);
+ }, []);
+
+
+  // const czatGrups = chatFunctions(user, 'FlowChats')
   const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: Colors.secondary_color },
     custom_top_nav: {
@@ -124,7 +151,7 @@ const ChatsScreen = ({ navigation }) => {
           {!showChat.show ?
             <View style={{ width: "100%", flex: 1 }}>
               {/* @ts-ignore */}
-              {czatGrups && czatGrups.map((name) => {
+              {czatGrups != undefined && czatGrups.map((name) => {
                 return <TouchableOpacity key={name} onPress={() => {setShowChat({ show: true, chat: name})}}>
                   <View key={name} style={{width: "100%", height: 100, backgroundColor: Colors.main_color, borderWidth: 3, borderRadius: 10, justifyContent: "center", alignItems: "center"}}>
                     <Text style={{fontSize: 30, fontWeight: "bold", color: Colors.secondary_color}}>{name}</Text>
