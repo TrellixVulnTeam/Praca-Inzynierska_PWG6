@@ -62,13 +62,19 @@ const ChatsScreen = ({ navigation }) => {
       UserToken: user.uid
       })
   })
+    console.log(user.uid)
      const json = await response.json();
      setCzatGrups(json != undefined && json.ChatFlow.split(','));
    } catch (error) {
      console.error(error);
    } 
  }
-
+//  useEffect(() => { 
+//   const id = setInterval(() => {
+//     getData(user);
+//   }, 1000)
+//   return () => clearInterval(id)
+// }, [])
  useEffect(() => {
   getData(user);
  }, []);
