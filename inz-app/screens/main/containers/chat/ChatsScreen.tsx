@@ -59,10 +59,9 @@ const ChatsScreen = ({ navigation }) => {
           'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-      UserToken: user.uid
+      UserToken: user == null ? "" : user.uid
       })
   })
-    console.log(user.uid)
      const json = await response.json();
      setCzatGrups(json != undefined && json.ChatFlow.split(','));
    } catch (error) {
