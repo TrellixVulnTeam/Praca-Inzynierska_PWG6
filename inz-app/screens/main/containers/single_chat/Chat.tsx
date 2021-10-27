@@ -76,7 +76,6 @@ const Chat = ({state, setState} : Props ) => {
         <View style={styles.container}>
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => {setState({...state, show: false})}} style={styles.backButtonStyle}>
-                    {/* TODO wyglad przycisku cofania */}
                     <FontAwesome
                         name="arrowleft"
                         color={Colors.white}

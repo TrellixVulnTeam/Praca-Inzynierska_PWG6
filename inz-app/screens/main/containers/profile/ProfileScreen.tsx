@@ -1,15 +1,17 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, TouchableOpacity, TextInput, StatusBar, Text, KeyboardAvoidingView, StyleSheet } from "react-native";
+import { View, TouchableOpacity, TextInput, StatusBar, Text, KeyboardAvoidingView, StyleSheet, LogBox } from "react-native";
 
 // @ts-ignore
 import FontAwesome from "react-native-vector-icons/AntDesign";
 import * as Animatable from "react-native-animatable";
 import { ThemeContext } from "../../../../model/themes"
 import { LanguageContext } from "../../../../languages/translator"
+import { APIvars } from "../../../../networking/API"
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { getLoginData, storeLoginData } from "../../../../asyncActions/login"
 
-// import { styles } from "./Profile_styles"
+LogBox.ignoreLogs(['Warning: ...']);
 
 // @ts-ignore
 const ProfileScreen = ({ navigation }) => {
@@ -81,9 +83,7 @@ const ProfileScreen = ({ navigation }) => {
       imie: "",
       nazwisko: "",
       email: "",
-      dane1: "",
-      dane2: "",
-      dane3: "",
+      preferences: "",
     },
     username: "",
     password: "",
@@ -96,6 +96,20 @@ const ProfileScreen = ({ navigation }) => {
   });
 
   const saveLoginData = async () => {
+    AsyncStorage.getItem("userToken").then((userToken) => {
+      fetch(APIvars.prefix + "://" + APIvars.ip + ":" + APIvars.port + "/updateUserInfo", {
+          method: 'POST',
+          headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            UserToken: userToken,
+            Preferences: data.userData.preferences
+          })
+        })
+    })
+    
     storeLoginData({
       "imie": data.userData.imie,
       "nazwisko": data.userData.nazwisko,
@@ -237,31 +251,13 @@ const ProfileScreen = ({ navigation }) => {
                 <Text style={{ fontSize: 25, fontWeight: 'bold', color: Colors.main_color }}>{LAN.user_preferences}</Text>
               </View>
               <View style={styles.user_info_container}>
-                <Text style={styles.user_info_text}>{LAN.data1}</Text>
+                <Text style={styles.user_info_text}>Preferences</Text>
                   {editUserData ?
                   <View style={{ flex: 1 }}>
-                    {inputViewUserData('Dane1', false, "Dane1")}
+                    {inputViewUserData('preferences', false, "preferences")}
                   </View>
                   :
-                  <Text style={styles.user_info_text}>{data.userData.dane1}</Text>}
-              </View>
-              <View style={styles.user_info_container}>
-                <Text style={styles.user_info_text}>{LAN.data2}</Text>
-                {editUserData ?
-                  <View style={{ flex: 1 }}>
-                    {inputViewUserData('Dane2', false, "Dane2")}
-                  </View>
-                  :
-                  <Text style={styles.user_info_text}>{data.userData.dane2}</Text>}
-              </View>
-              <View style={styles.user_info_container}>
-                <Text style={styles.user_info_text}>{LAN.data3}</Text>
-                {editUserData ?
-                  <View style={{ flex: 1 }}>
-                    {inputViewUserData('Dane3', false, "Dane3")}
-                  </View>
-                  :
-                  <Text style={styles.user_info_text}>{data.userData.dane3}</Text>}
+                  <Text style={styles.user_info_text}>{data.userData.preferences}</Text>}
               </View>
               </View>
             <View style={{ width: "100%", flex: 0.4, alignItems: "center", justifyContent:"flex-start" }}>

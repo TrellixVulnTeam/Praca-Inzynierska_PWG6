@@ -63,23 +63,19 @@ const ChatsScreen = ({ navigation }) => {
       })
   })
      const json = await response.json();
-     setCzatGrups(json != undefined && json.ChatFlow.split(','));
+     setCzatGrups(json.ChatFlow != undefined && json.ChatFlow.split(','));
    } catch (error) {
      console.error(error);
    } 
  }
-//  useEffect(() => { 
-//   const id = setInterval(() => {
-//     getData(user);
-//   }, 1000)
-//   return () => clearInterval(id)
-// }, [])
+ 
  useEffect(() => {
-  getData(user);
- }, []);
+  setTimeout(async () => {
+    getData(user);
+  }, 1000);
+ });
 
 
-  // const czatGrups = chatFunctions(user, 'FlowChats')
   const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: Colors.secondary_color },
     custom_top_nav: {
@@ -156,7 +152,7 @@ const ChatsScreen = ({ navigation }) => {
           {!showChat.show ?
             <View style={{ width: "100%", flex: 1 }}>
               {/* @ts-ignore */}
-              {czatGrups != undefined && czatGrups.map((name) => {
+              {(czatGrups != undefined && czatGrups.length > 0 )&& czatGrups.map((name) => {
                 return <TouchableOpacity key={name} onPress={() => {setShowChat({ show: true, chat: name})}}>
                   <View key={name} style={{width: "100%", height: 100, backgroundColor: Colors.main_color, borderWidth: 3, borderRadius: 10, justifyContent: "center", alignItems: "center"}}>
                     <Text style={{fontSize: 30, fontWeight: "bold", color: Colors.secondary_color}}>{name}</Text>

@@ -1,24 +1,22 @@
 import { useState } from 'react';
 import { APIvars } from '../networking/API'
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
 // @ts-ignore
 const chatFunctions = (user, component) => {
-
-    const [resp, setResp] = useState()
-
     switch(component){
         case 'FlowChats':
-            return user && ['grupa-rowerowa', 'grupa-motocyklowa', 'grupa-kwiatowa']
+            return user && call(user)
         case 'MainChats':
-            return user && ['grupa-rowerowa', 'grupa-motocyklowa']
+            return user && call(user)
     }
 }   
 
 export default chatFunctions;
 
 // @ts-ignore
-const call = async (user) => {
-        await fetch(APIvars.prefix + "://" + APIvars.ip + ":" + APIvars.port + "/getUserInfo", {
+const call = (user) => {
+    fetch(APIvars.prefix + "://" + APIvars.ip + ":" + APIvars.port + "/getUserInfo", {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -32,7 +30,7 @@ const call = async (user) => {
     .then((responseJSON) => {
         AsyncStorage.setItem("ChatFlow", responseJSON.ChatFlow);
         AsyncStorage.setItem("MainChats", responseJSON.MainChats);
-        
+        return responseJSON.ChatFlow
     })
 }  
 

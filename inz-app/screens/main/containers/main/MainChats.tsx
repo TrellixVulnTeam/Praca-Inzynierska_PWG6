@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {
   View,
   TouchableOpacity,
@@ -16,6 +16,7 @@ import chatFunctions from '../../../../functions/chat_groups'
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { ThemeContext } from "../../../../model/themes"
 import { LanguageContext } from "../../../../languages/translator"
+import { APIvars } from "../../../../networking/API";
 
 
 if (!firebase.apps.length) {
@@ -42,11 +43,33 @@ const MainChats = ({ navigation }) => {
     show: false,
     chat: ""
   })
+  const [czatGrups, setCzatGrups] = useState([]);
 
   const auth = firebase.auth();
   const [user] = useAuthState(auth);
-
-  const czatGrups = chatFunctions(user, 'MainChats')
+// @ts-ignore
+  const getData = async (user) => {
+    try {
+     const response = await fetch(APIvars.prefix + "://" + APIvars.ip + ":" + APIvars.port + "/getUserInfo", {
+      method: 'POST',
+      headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+      UserToken: user == null ? "" : user.uid
+      })
+  })
+     const json = await response.json();
+     setCzatGrups(json.ChatFlow != undefined ? json.ChatFlow.split(',') : []);
+   } catch (error) {
+     console.error(error);
+   } 
+ }
+ 
+ useEffect(() => {
+  getData(user);
+ });
 
   const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: Colors.main_color },
@@ -123,7 +146,7 @@ const MainChats = ({ navigation }) => {
           {!showChat.show ?
             <View style={{ width: "100%", flex: 1 }}>
               {/* @ts-ignore */}
-              {czatGrups && czatGrups.map((name) => {
+              {czatGrups.length > 0 && czatGrups.map((name) => {
                 return <TouchableOpacity key={name} onPress={() => {setShowChat({ show: true, chat: name})}}>
                   <View key={name} style={{width: "100%", height: 100, backgroundColor: Colors.secondary_color, borderWidth: 3, borderRadius: 10, justifyContent: "center", alignItems: "center"}}>
                     <Text style={{fontSize: 30, fontWeight: "bold", color: Colors.main_color}}>{name}</Text>

@@ -27,9 +27,6 @@ const Settings = ({ navigation }) => {
         })
         state.toggleTheme()
     }
-    const onPressRemoveOriginal = () => {
-        setRemoveOriginal(!removeOriginal)
-    }
     const onPressLanguage = () => {
         if(isEn){
             langState.changeLanguage("pl")
@@ -152,18 +149,6 @@ const Settings = ({ navigation }) => {
                             <Text style={styles.body_main_text_secondary}>Off</Text>
                         }
                     </TouchableOpacity>
-                </View>
-                <View style={{...styles.body_main_text_container, flexDirection: "row", justifyContent: "space-between"}}>
-                    <TouchableOpacity onPress={onPressRemoveOriginal}>
-                        <Text style={styles.body_main_text_main}>{LAN.remove_oryginal}</Text>
-                    </TouchableOpacity>
-                    <Switch
-                        style={{ marginTop: 0 }}
-                        trackColor={{false: Colors.grey2, true: Colors.orange}}
-                        thumbColor={Colors.grey1}
-                        onValueChange={onPressRemoveOriginal}
-                        value={removeOriginal}
-                    />
                 </View>
                 <View style={styles.body_main_text_container}>
                     <TouchableOpacity onPress={onPressLanguage}>

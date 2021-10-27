@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+// @ts-ignore
 export const storeLoginData = async (value) => {
     try {
       const jsonValue = JSON.stringify(value)

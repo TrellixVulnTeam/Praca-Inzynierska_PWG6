@@ -9,7 +9,9 @@ import {
   Image,
 } from "react-native";
 import * as Animatable from "react-native-animatable";
+// @ts-ignore
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+// @ts-ignore
 import Feather from "react-native-vector-icons/Feather";
 
 import { useTheme } from "react-native-paper";
@@ -18,10 +20,11 @@ import { AuthContext } from "../../../components/context";
 import { styles } from "./Login_styles";
 import { Colors } from "../../../model/colors";
 
+// @ts-ignore
 const Login = ({ navigation }) => {
   const [data, setData] = React.useState({
-    username: "test@wp.pl",
-    password: "123456",
+    username: "",
+    password: "",
     check_textInputChange: false,
     secureTextEntry: true,
     isValidUser: true,
@@ -29,9 +32,9 @@ const Login = ({ navigation }) => {
   });
 
   const { colors } = useTheme();
-
+// @ts-ignore
   const { LoginContext } = React.useContext(AuthContext);
-
+// @ts-ignore
   const textInputChange = (val) => {
     if (val.trim().length >= 4) {
       setData({
@@ -96,13 +99,6 @@ const Login = ({ navigation }) => {
       );
       return;
     }
-
-    // if (foundUser.length == 0) {
-    //   Alert.alert("Invalid User!", "Username or password is incorrect.", [
-    //     { text: "Okay" },
-    //   ]);
-    //   return;
-    // }
     LoginContext(data.username, data.password);
   };
 

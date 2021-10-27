@@ -1,7 +1,7 @@
 import "react-native-gesture-handler";
 import React, { useEffect, useMemo, useState } from "react";
 
-import { StyleSheet, SafeAreaView, Alert } from "react-native";
+import { StyleSheet, SafeAreaView, Alert, LogBox } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -24,7 +24,7 @@ import 'firebase/firestore';
 import 'firebase/auth';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
-
+LogBox.ignoreLogs(['Warning: ...']);
 if (!firebase.apps.length) {
   firebase.initializeApp({
     apiKey: "AIzaSyAE_j_ab3X82potUIrI5rJULukp6yLcsa8",
@@ -43,9 +43,7 @@ const auth = firebase.auth();
 
 const Stack = createStackNavigator();
 
-function SignIn(email = "test@wp.pl", password = "123456") {
-    auth.signInWithEmailAndPassword(email, password)
-}
+
 
 export default function App() {
   const initialLoginState = {
@@ -53,7 +51,15 @@ export default function App() {
     userName: "",
     userToken: "",
   };
-
+  function SignIn(email: string, password: string) {
+    auth.signInWithEmailAndPassword(email, password).then((res) => {
+      // @ts-ignore
+      AsyncStorage.setItem("userToken", res.user.uid);
+      loginState.isLoading = false;
+      // @ts-ignore
+      dispach({ type: "LOGIN", id: email, token: res.user.uid });
+    })
+  }
   const [user] = useAuthState(auth);
   const [theme, setTheme] = useState({theme: themes.light})
   const [language, setLanguage] = useState({language: languages.en})
@@ -98,11 +104,8 @@ export default function App() {
 
   const authContext = useMemo(
     () => ({
-      LoginContext: async (username = "", password = "") => {
+      LoginContext: async (username: string, password: string) => {
         SignIn(username, password)
-        AsyncStorage.setItem("userToken", "qqqqq");
-        loginState.isLoading = false;
-        dispach({ type: "LOGIN", id: username, token: "qqqqq" });
       },
       LogoutContext: async () => {
         auth.signOut()
@@ -147,11 +150,28 @@ export default function App() {
       },
       // @ts-ignore
       RegisterContext: (username, password) => {
-        let usertoken = "";
-        if (username == "user" && password == "aaaaaaaa") {
-          usertoken = "qqqq";
-        }
-        dispach({ type: "REGISTER", id: username, token: usertoken });
+        auth.createUserWithEmailAndPassword(username, password).then((res) => {
+          // @ts-ignore
+          AsyncStorage.setItem("userToken", res.user.uid);
+          loginState.isLoading = false;
+          // @ts-ignore
+          dispach({ type: "REGISTER", id: username, token: res.user.uid });
+          fetch(APIvars.prefix + "://" + APIvars.ip + ":" + APIvars.port + "/createUser", {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              // @ts-ignore
+              UserToken: res.user.uid,
+              username: username
+            })
+          })
+          .then((response) => response.json())
+          .then((responseJSON) => {})
+          })
+        
       },
     }),
     []

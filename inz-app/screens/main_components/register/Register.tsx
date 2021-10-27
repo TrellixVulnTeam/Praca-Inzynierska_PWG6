@@ -11,17 +11,18 @@ import {
   Image,
 } from "react-native";
 import * as Animatable from "react-native-animatable";
+// @ts-ignore
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+// @ts-ignore
 import Feather from "react-native-vector-icons/Feather";
 
 import { useTheme } from "react-native-paper";
 
-import { Users } from "../../../model/users";
 import { Colors } from "../../../model/colors";
 import { styles } from "./Register_styles"
 
 import { AuthContext } from "../../../components/context";
-
+// @ts-ignore
 const Register = ({ navigation }) => {
   const [data, setData] = React.useState({
     username: "",
@@ -35,9 +36,9 @@ const Register = ({ navigation }) => {
   });
 
   const { colors } = useTheme();
-
+// @ts-ignore
   const { RegisterContext } = React.useContext(AuthContext);
-
+// @ts-ignore
   const textInputChange = (val) => {
     if (val.trim().length >= 4) {
       setData({
@@ -55,18 +56,8 @@ const Register = ({ navigation }) => {
       });
     }
   };
-
-  const handleRegister = (
-    userName,
-    password,
-    areTheSame,
-    isValidUser,
-    isValidPassword
-  ) => {
-    const foundUser = Users.filter((item) => {
-      return userName == item.username && password == item.password;
-    });
-
+// @ts-ignore
+  const handleRegister = (userName,password,areTheSame,isValidUser,isValidPassword) => {
     if (areTheSame) {
       if (isValidUser && isValidPassword) {
         RegisterContext(userName, password);
@@ -84,7 +75,7 @@ const Register = ({ navigation }) => {
       return;
     }
   };
-
+  // @ts-ignore
   const handlePasswordChange = (val) => {
     if (val.trim().length >= 8) {
       setData({
@@ -100,7 +91,7 @@ const Register = ({ navigation }) => {
       });
     }
   };
-
+// @ts-ignore
   const handlePasswordConfirmChange = (val) => {
     if (val == data.password) {
       setData({
@@ -120,7 +111,7 @@ const Register = ({ navigation }) => {
       secureTextEntry: !data.secureTextEntry,
     });
   };
-
+// @ts-ignore
   const handleValidUser = (val) => {
     if (val.trim().length >= 4) {
       setData({
